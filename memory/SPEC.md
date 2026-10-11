@@ -1,0 +1,58 @@
+# FAST INVESTIMENTOS — Especificação viva
+
+## O que o app faz
+Plataforma financeira (pt-BR, mobile-first, tema grafite/esmeralda/menta) para contratação e
+acompanhamento de **grupos de investimento**. Cliente escolhe um grupo (valor fixo), uma
+modalidade de prazo em dias úteis, paga pelo link oficial do administrador e acompanha a
+apuração diária. Resgates passam por aprovação manual do administrador com auditoria.
+
+## Stack
+FastAPI + motor/MongoDB (`/app/backend`) · Vite + React 19 + TS strict + Tailwind v4 + shadcn
+(`/app/frontend`). Todas as rotas no `api_router` com prefixo `/api`. Sessões em cookie
+httpOnly (`fast_session`), senha com PBKDF2-SHA256.
+
+## Catálogo (servidor — `backend/lib/business.py`)
+Grupos: GR 50 (R$50), GR 100, GR 200, GR 250, GR 300, GR 400, GR 500, GR 700, GR 800, GR 1000.
+Modalidades: `MOD_15` = 15 dias úteis / 15% no período · `MOD_30` = 30 dias úteis / 35% no período.
+Apuração **linear por dia útil**: rendimento total ÷ dias úteis da modalidade.
+Calendário: dias úteis brasileiros (fins de semana + feriados nacionais fixos e móveis).
+Fuso de referência: **America/Sao_Paulo** (rollover às 00h).
+
+## Modelo de dados (coleções)
+- `users` — id, full_name, cpf, email, phone, endereço completo, password_hash, role (`client`|`admin`)
+- `sessions` — token, user_id, expires_at (TTL)
+- `reset_tokens` — token, user_id, expires_at (TTL 30min)
+- `investments` — group_id/code, amount, modality_id/name, business_days, yield_percent,
+  status (`aguardando_pagamento`|`ativo`|`concluido`|`cancelado`), start_date, end_date, paid_out
+- `withdrawals` — amount, pix_key, status (`pendente`|`aprovado`|`rejeitado`), justification, paid
+- `audit_logs` — actor_email, action, target_type, target_id, details, created_at
+- `settings` (key=`global`) — payment_link, whatsapp_number, whatsapp_message, support_email, company_name
+
+## Fluxos principais
+1. **Cadastro** `/cadastro` → nome, CPF (validado com dígitos verificadores), e-mail, telefone,
+   CEP (auto-preenche via ViaCEP), endereço, número, complemento, bairro, cidade, UF, senha,
+   aceite dos termos. Explicação do uso do CPF abaixo do campo.
+2. **Login** `/login` · **Recuperação** `/recuperar-senha` (gera código de 30min, redefine senha).
+3. **Painel** `/painel` → saudação, Total investido, Resultado acumulado (apurado vs projetado,
+   disponível, já pago), botão COMEÇAR A INVESTIR, lista Meus investimentos, Histórico, Suporte.
+4. **Grupos** `/grupos` → 10 cartões → diálogo com modalidades → cria investimento → `/checkout/:id`.
+5. **Checkout** → link oficial de pagamento (configurado no admin).
+6. **Detalhe** `/investimento/:id` → gráfico de linha compacto (recharts) + cronograma por dia útil.
+7. **Saques** `/saques` → saldo disponível (só investimentos concluídos, menos reservas), solicitação
+   com chave PIX, histórico com parecer.
+8. **Admin** `/admin` (role admin) → KPIs, saques (aprovar/rejeitar com justificativa obrigatória,
+   registrar pagamento), investimentos (confirmar pagamento → ativa e agenda o período),
+   clientes (busca, exclusão LGPD), configurações, auditoria.
+9. **WhatsApp flutuante** em todas as páginas, número do admin, `bottom-4 right-4`, páginas com `pb-28`.
+
+## Regras de valor
+- `projetado` = amount × yield% (período integral) · `apurado` = projetado × diasDecorridos/diasTotais
+- `disponível` = soma dos concluídos não pagos − pedidos pendentes/aprovados
+- Investimento ativo vencido vira `concluido` no servidor (sem duplicidade).
+
+## Papéis
+- `client` — painel, grupos, checkout, detalhes, saques, histórico.
+- `admin` — tudo acima + `/admin`; todas as rotas `/api/admin/*` exigem `current_admin` no servidor.
+
+## Credenciais
+Ver `memory/test_credentials.md`. Seed: `cd /app/backend && python seed.py` (idempotente).

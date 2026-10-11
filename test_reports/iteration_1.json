@@ -1,0 +1,99 @@
+{
+  "iteration": 1,
+  "summary": "All 8 acceptance-matrix criteria exercised: 3 backend pytest files (8 tests) + 9 browser checks, all passing.",
+  "passed": 17,
+  "failed": 0,
+  "retest_needed": false,
+  "bugs": [],
+  "action_items": [],
+  "checks": [
+    {
+      "criterion": "Landing page pública completa (pt-BR) com logo, menu, Entrar/Criar conta, como funciona, 10 cartões de grupos, carrossel, FAQ, transparência e botão flutuante de WhatsApp",
+      "name": "landing-page-public-content",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "10 landing-group-card-* visible, FAQ item 0 open-by-default collapses/expands via faq-toggle-0, whatsapp-floating-button visible, mobile menu shows login/register links."
+    },
+    {
+      "criterion": "Cadastro com validação de CPF, telefone, CEP, endereço e aceite obrigatório dos termos",
+      "name": "register-cpf-validation-and-success",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Invalid CPF 111.111.111-11 blocked submission (stayed on /cadastro); CEP 01001-000 auto-filled address via ViaCEP; valid generated CPF + accepted terms created account and redirected to /painel with dashboard-greeting visible."
+    },
+    {
+      "criterion": "Cadastro com validação de CPF, telefone, CEP, endereço e aceite obrigatório dos termos (API)",
+      "name": "test_tscheck_register_validation.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /auth/register with cpf=11111111111 -> 422; accept_terms=false -> 422; valid generated CPF -> 201 with role=client and session cookie set."
+    },
+    {
+      "criterion": "Login, logout e recuperação de senha funcionam; rotas privadas bloqueiam acesso anônimo",
+      "name": "login-logout-protected-routes",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Anon GET /painel and /admin redirect to /login; wrong password shows inline error without navigating; correct login reaches /painel; logout then re-visiting /painel redirects to /login again."
+    },
+    {
+      "criterion": "Login, logout e recuperação de senha funcionam (fluxo de redefinição)",
+      "name": "password-recovery-reset-flow",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "/recuperar-senha auto-fills reset-token-input from the API response (per spec_deviations), reset to Teste1234 succeeds and redirects to /login, then logs in with the (unchanged) password."
+    },
+    {
+      "criterion": "Login, logout e recuperação de senha funcionam; rotas privadas bloqueiam acesso anônimo (API)",
+      "name": "test_tscheck_login_logout_recovery.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /auth/login wrong creds -> 401; GET /investments/dashboard anon -> 401/403; full cycle login(200)->dashboard(200)->logout(200)->dashboard blocked->forgot-password returns reset_token->reset-password(200)->old password 401/new password 200."
+    },
+    {
+      "criterion": "Dashboard do cliente mostra saudação, Total investido, Resultado acumulado, COMEÇAR A INVESTIR, Meus investimentos, Histórico e Suporte — sem gráficos complexos",
+      "name": "dashboard-client-overview",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "dashboard-greeting='Olá, Carlos'; card-total-invested shows R$ 600,00 / 2 investimento(s) ativo(s); value-accrued-result and value-projected-result (R$190,00) both present; 0 recharts SVGs on screen; start-investing-button navigates to /grupos; history/withdrawals/support controls visible."
+    },
+    {
+      "criterion": "Cada investimento mostra grupo, valor inicial, modalidade, prazo, status e evolução, sem misturar valores entre investimentos",
+      "name": "investment-cards-distinct-values",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Active GR 100 (MOD_15) and GR 500 (MOD_30) cards located among the 4 aportes shown (2 ativo + 2 aguardando_pagamento, per seed_facts); each detail page shows its own group/modality line and schedule-row-15 / schedule-row-30 respectively, with no value cross-contamination."
+    },
+    {
+      "criterion": "Gráfico de linha simples dentro de cada investimento, com cronograma por dia útil (pula feriados) e cartões no mobile",
+      "name": "investment-detail-chart-and-schedule",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "detail-chart-card contains an SVG line chart; schedule-row-15 present; schedule text excludes '12/10' (national holiday), confirming business-day calculation skips it."
+    },
+    {
+      "criterion": "Grupos GR 50 a GR 1000 abrem detalhes, permitem escolher modalidade de 15 ou 30 dias e seguem para o checkout com o link de pagamento do admin",
+      "name": "groups-checkout-flow",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "All 10 group-card-* visible on /grupos; dialog shows modality-option-MOD_15/MOD_30; choosing MOD_15 and continuing creates the aporte and opens /checkout/:id with checkout-summary containing '200' and checkout-payment-url containing https://pagamento.fastinvestimentos.com.br/pix."
+    },
+    {
+      "criterion": "Painel administrativo protegido por função: resumo, clientes, confirmação de pagamento, aprovação/rejeição de saque com justificativa obrigatória e auditoria",
+      "name": "admin-panel-protected-and-functional",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Client visiting /admin is redirected to /painel; admin login reaches /admin with admin-tabs visible; withdrawals/investments/audit/settings tabs all render their panels; admin-audit-* rows present; settings fields (payment link, whatsapp number) visible."
+    },
+    {
+      "criterion": "Painel administrativo protegido por função no servidor (API: confirmação de pagamento, justificativa de saque, auditoria)",
+      "name": "test_tscheck_admin_payment_withdrawal_audit.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "Client role -> GET /admin/summary 401/403; client creates aporte GR100/MOD_15 (201, status=aguardando_pagamento); admin POST /admin/investments/{id}/confirm-payment -> 200 status=ativo with start_date set; GET /admin/audit contains action 'pagamento.confirmado'; POST /admin/withdrawals/{id}/approve with justification<3 chars -> 422; with valid justification on a non-existent id -> 404 (role+validation both enforced server-side)."
+    }
+  ],
+  "notes": [
+    "Acceptance criterion 5's expected text implies the dashboard list has exactly 2 cards; seed_facts clarify 4 total aportes exist (2 ativo + 2 aguardando_pagamento for GR250/GR800), and the UI correctly renders all 4. Treated as a documentation/wording ambiguity (note), not a bug — the 2 ACTIVE cards (GR100/GR500) called out by the criterion were verified with correct, non-mixed values.",
+    "A transient welcome toast (sonner) briefly overlapped a 'Ver detalhes' button on /painel immediately after login, matching the documented spec_deviations note; using a non-forced Playwright click (which waits out overlays) resolved it without any app change."
+  ]
+}
