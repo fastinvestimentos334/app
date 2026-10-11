@@ -39,6 +39,7 @@ export interface Modality {
 export interface SettingsPublic {
   whatsapp_number: string;
   whatsapp_message: string;
+  whatsapp_link: string;
   support_email: string;
   company_name: string;
 }
@@ -142,7 +143,9 @@ export interface AdminSummary {
 export interface AdminSettings {
   whatsapp_number: string;
   whatsapp_message: string;
+  whatsapp_link: string;
   payment_link: string;
+  group_payment_links: Record<string, string>;
   support_email: string;
   company_name: string;
 }

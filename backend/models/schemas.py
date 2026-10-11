@@ -154,6 +154,7 @@ class ModalityOut(BaseModel):
 class SettingsPublicOut(BaseModel):
     whatsapp_number: str
     whatsapp_message: str
+    whatsapp_link: str
     support_email: str
     company_name: str
 
@@ -284,7 +285,9 @@ class AdminSummaryOut(BaseModel):
 class AdminSettingsOut(BaseModel):
     whatsapp_number: str
     whatsapp_message: str
+    whatsapp_link: str = ""
     payment_link: str
+    group_payment_links: dict[str, str] = {}
     support_email: str
     company_name: str
 
@@ -292,9 +295,32 @@ class AdminSettingsOut(BaseModel):
 class AdminSettingsInput(BaseModel):
     whatsapp_number: str = Field(min_length=10, max_length=20)
     whatsapp_message: str = Field(min_length=3, max_length=200)
+    whatsapp_link: str = Field(default="", max_length=300)
     payment_link: str = Field(min_length=8, max_length=300)
+    group_payment_links: dict[str, str] = {}
     support_email: EmailStr
     company_name: str = Field(min_length=2, max_length=80)
+
+    @field_validator("whatsapp_link")
+    @classmethod
+    def check_support_link(cls, v: str) -> str:
+        v = (v or "").strip()
+        if v and not v.startswith(("http://", "https://")):
+            raise ValueError("O link de suporte deve começar com http:// ou https://")
+        return v
+
+    @field_validator("group_payment_links")
+    @classmethod
+    def check_group_links(cls, v: dict[str, str]) -> dict[str, str]:
+        cleaned: dict[str, str] = {}
+        for group_id, link in (v or {}).items():
+            link = (link or "").strip()
+            if not link:
+                continue
+            if not link.startswith(("http://", "https://")):
+                raise ValueError(f"O link do grupo {group_id} deve começar com http:// ou https://")
+            cleaned[group_id] = link
+        return cleaned
 
 
 class AuditLogOut(BaseModel):

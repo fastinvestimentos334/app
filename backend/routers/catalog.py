@@ -3,7 +3,7 @@
 from fastapi import APIRouter
 
 from lib.business import GROUPS, MODALITIES, today_br
-from lib.security import get_settings
+from lib.security import get_settings, resolve_support_link
 from models.schemas import CatalogOut
 
 router = APIRouter(tags=["catalog"])
@@ -18,6 +18,7 @@ async def catalog():
         "settings": {
             "whatsapp_number": settings["whatsapp_number"],
             "whatsapp_message": settings["whatsapp_message"],
+            "whatsapp_link": resolve_support_link(settings),
             "support_email": settings["support_email"],
             "company_name": settings["company_name"],
         },

@@ -64,16 +64,35 @@ export default function SiteHeader() {
           )}
         </div>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Abrir menu"
-          data-testid="mobile-menu-toggle"
-          className="lg:hidden"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </Button>
+        <div className="flex items-center gap-2 lg:hidden">
+          {me ? (
+            <Button
+              size="sm"
+              data-testid="mobile-header-dashboard-button"
+              onClick={() => navigate(me.role === "admin" ? "/admin" : "/painel")}
+              className="h-10 rounded-xl bg-[#00E676] px-4 text-sm font-semibold text-[#062315]"
+            >
+              Meu painel
+            </Button>
+          ) : (
+            <Link
+              to="/login"
+              data-testid="mobile-header-login-link"
+              className="flex h-10 items-center rounded-xl border border-[#00E676]/40 bg-[#00E676]/10 px-4 text-sm font-semibold text-[#00E676] transition-colors duration-200 active:bg-[#00E676]/20"
+            >
+              Entrar
+            </Link>
+          )}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Abrir menu"
+            data-testid="mobile-menu-toggle"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
       </div>
 
       {open && (

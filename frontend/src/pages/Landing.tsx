@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import PlatformCarousel from "@/components/PlatformCarousel";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useCatalog } from "@/hooks/useAppData";
 import { brl, pct } from "@/lib/format";
@@ -458,38 +459,72 @@ export default function Landing() {
       </section>
 
       {/* ── TRANSPARÊNCIA ────────────────────────────────────── */}
-      <section id="transparencia" className="border-t border-white/[0.07] bg-[#17191C] py-16 sm:py-24">
+      {/* ── APRESENTAÇÃO DA PLATAFORMA ───────────────────────── */}
+      <section className="border-t border-white/[0.07] py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-16">
-            <div className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1521791136064-7986c2920216?crop=entropy&cs=srgb&fm=jpg&q=75&w=1200"
-                alt="Reunião institucional"
-                className="h-72 w-full rounded-2xl border border-white/[0.09] object-cover grayscale-[0.35] sm:h-96"
-              />
-              <div
-                className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#17191C] via-transparent to-transparent"
-                aria-hidden
-              />
-            </div>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-[11px] font-semibold tracking-[0.22em] text-[#00E676] uppercase">
-                Transparência
+                Conheça a plataforma
+              </p>
+              <h2 className="mt-4 max-w-xl text-2xl font-semibold text-white sm:text-[2rem]">
+                Veja como você acompanha cada centavo
+              </h2>
+            </div>
+            <p className="max-w-sm text-sm leading-relaxed text-[#8A94A0]">
+              Telas reais do produto: painel, evolução diária, grupos e o fluxo de resgate auditado.
+            </p>
+          </div>
+          <div className="mt-10">
+            <PlatformCarousel />
+          </div>
+        </div>
+      </section>
+
+      {/* ── POR QUE A FAST ───────────────────────────────────── */}
+      <section id="transparencia" className="border-t border-white/[0.07] bg-[#17191C] py-16 sm:py-24">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start lg:gap-16">
+            <div className="lg:sticky lg:top-28">
+              <p className="text-[11px] font-semibold tracking-[0.22em] text-[#00E676] uppercase">
+                Por que a FAST
               </p>
               <h2 className="mt-4 text-2xl font-semibold text-white sm:text-[2rem]">
                 Regras claras e registros auditáveis
               </h2>
-              <div className="mt-9 divide-y divide-white/[0.07]">
-                {PILLARS.map((item) => (
-                  <div key={item.title} className="flex gap-5 py-5" data-testid={`transparency-item-${item.title.length}`}>
-                    <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-[#00E676]" strokeWidth={1.6} />
-                    <div>
-                      <p className="font-medium text-white">{item.title}</p>
-                      <p className="mt-1.5 text-sm leading-relaxed text-[#8A94A0]">{item.text}</p>
-                    </div>
+              <p className="mt-5 text-sm leading-relaxed text-[#A8B0BA]">
+                Nada de caixa-preta: você vê o valor projetado, o que já foi apurado, o que está disponível e o
+                que foi pago — com o cálculo rodando no servidor e cada decisão administrativa registrada.
+              </p>
+              <dl className="mt-9 grid grid-cols-2 gap-6 border-t border-white/[0.07] pt-7">
+                {[
+                  { k: "Grupos disponíveis", v: "10" },
+                  { k: "Entrada mínima", v: "R$ 50" },
+                  { k: "Modalidades", v: "15 / 30" },
+                  { k: "Apuração", v: "00h diária" },
+                ].map((item) => (
+                  <div key={item.k}>
+                    <dt className="text-[11px] tracking-[0.1em] text-[#7D8794] uppercase">{item.k}</dt>
+                    <dd className="mt-1.5 font-mono text-lg font-semibold text-white">{item.v}</dd>
                   </div>
                 ))}
-              </div>
+              </dl>
+            </div>
+
+            <div className="divide-y divide-white/[0.07]">
+              {PILLARS.map((item) => (
+                <div
+                  key={item.title}
+                  className="flex gap-5 py-6"
+                  data-testid={`transparency-item-${item.title.length}`}
+                >
+                  <item.icon className="mt-0.5 h-5 w-5 shrink-0 text-[#00E676]" strokeWidth={1.6} />
+                  <div>
+                    <p className="font-medium text-white">{item.title}</p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-[#8A94A0]">{item.text}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

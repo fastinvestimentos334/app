@@ -51,8 +51,9 @@ frontend/src/
 | POST | `/admin/withdrawals/{id}/approve` | admin | aprova com justificativa |
 | POST | `/admin/withdrawals/{id}/reject` | admin | rejeita com justificativa |
 | POST | `/admin/withdrawals/{id}/mark-paid` | admin | registra o pagamento efetuado |
-| GET/PUT | `/admin/settings` | admin | link de pagamento, WhatsApp, e-mail, nome |
+| GET/PUT | `/admin/settings` | admin | link padrão, **links de checkout por grupo**, link de suporte, WhatsApp, e-mail, nome |
 | GET | `/admin/audit` | admin | registros de auditoria |
+| POST | `/cron/daily-accrual` | cron (Bearer) | apuração diária automática às 00h (America/Sao_Paulo) |
 
 ## 3. Regras de cálculo
 
@@ -77,9 +78,30 @@ frontend/src/
 
 ## 5. Configuração
 
-`backend/.env`: `MONGO_URL`, `DB_NAME`, `CORS_ORIGINS`, opcional `COOKIE_SECURE`.
-O link de pagamento e o número de WhatsApp **não** ficam no `.env`: são editados em
+`backend/.env`: `MONGO_URL`, `DB_NAME`, `CORS_ORIGINS`, `WEBHOOK_CRON_SECRET`, opcional `COOKIE_SECURE`.
+O link de pagamento e o número/link de WhatsApp **não** ficam no `.env`: são editados em
 `/admin` → aba **Configurações**, e aplicam-se imediatamente a toda a plataforma.
+
+Na aba Configurações o administrador define:
+- **Link de pagamento padrão** — usado por qualquer grupo sem link próprio.
+- **Link de checkout por grupo** — um campo para cada um dos 10 grupos (GR 50 a GR 1000),
+  permitindo um link de cobrança diferente por grupo. Em branco, o grupo usa o link padrão.
+- **Link do suporte** — URL completa do atendimento (WhatsApp ou outro canal) usada pelo botão
+  flutuante em todas as páginas. Em branco, o sistema monta o link a partir do número oficial.
+
+### Apuração diária automática
+`.emergent/crons.yml` agenda `POST /api/cron/daily-accrual` para **00h de Brasília, todos os dias**.
+O endpoint exige `Authorization: Bearer $WEBHOOK_CRON_SECRET`, responde imediatamente e processa em
+background: grava o apurado do dia de cada investimento, conclui os que venceram e registra a
+execução na auditoria. É idempotente — entregas duplicadas e reexecuções no mesmo dia não geram
+lançamentos repetidos.
+
+Teste manual:
+```bash
+curl -X POST http://localhost:8001/api/cron/daily-accrual \
+  -H "Authorization: Bearer $(grep WEBHOOK_CRON_SECRET backend/.env | cut -d= -f2)" \
+  -H 'Content-Type: application/json' -d '{}'
+```
 
 ## 6. Operação
 

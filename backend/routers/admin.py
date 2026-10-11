@@ -4,7 +4,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from lib.business import as_utc, money, now_utc, today_br
+from lib.business import GROUPS_BY_ID, as_utc, money, now_utc, today_br
 from lib.db import db
 from lib.security import current_admin, get_settings, public_user, write_audit
 from models.schemas import (
@@ -184,17 +184,27 @@ async def mark_paid(withdrawal_id: str, admin: Annotated[dict, Depends(current_a
 @router.get("/settings", response_model=AdminSettingsOut)
 async def read_settings(admin: Annotated[dict, Depends(current_admin)]):
     settings = await get_settings()
-    return {k: settings[k] for k in AdminSettingsOut.model_fields}
+    return {k: settings.get(k, "") for k in AdminSettingsOut.model_fields}
 
 
 @router.put("/settings", response_model=AdminSettingsOut)
 async def update_settings(payload: AdminSettingsInput, admin: Annotated[dict, Depends(current_admin)]):
     values = payload.model_dump()
     values["whatsapp_number"] = "".join(ch for ch in values["whatsapp_number"] if ch.isdigit())
+    unknown = set(values["group_payment_links"]) - set(GROUPS_BY_ID)
+    if unknown:
+        raise HTTPException(status_code=400, detail=f"Grupo(s) inexistente(s): {', '.join(sorted(unknown))}")
     await db.settings.update_one({"key": "global"}, {"$set": values}, upsert=True)
-    await write_audit(admin, "configuracao.atualizada", "settings", "global", "Parâmetros operacionais alterados")
+    custom = len(values["group_payment_links"])
+    await write_audit(
+        admin,
+        "configuracao.atualizada",
+        "settings",
+        "global",
+        f"Parâmetros operacionais alterados ({custom} link(s) de checkout específico(s) por grupo)",
+    )
     settings = await get_settings()
-    return {k: settings[k] for k in AdminSettingsOut.model_fields}
+    return {k: settings.get(k, "") for k in AdminSettingsOut.model_fields}
 
 
 @router.get("/audit", response_model=list[AuditLogOut])

@@ -20,7 +20,7 @@ from lib.business import (
     today_br,
 )
 from lib.db import db
-from lib.security import current_user, get_settings, write_audit
+from lib.security import current_user, get_settings, resolve_payment_link, write_audit
 from models.schemas import (
     DashboardOut,
     HistoryEntry,
@@ -45,7 +45,7 @@ def _to_date(value) -> date | None:
     return None
 
 
-def project(doc: dict, reference: date, payment_link: str = "") -> dict:
+def project(doc: dict, reference: date, settings: dict | None = None) -> dict:
     start = _to_date(doc.get("start_date"))
     end = _to_date(doc.get("end_date"))
     if doc["status"] == "ativo" and start:
@@ -71,7 +71,7 @@ def project(doc: dict, reference: date, payment_link: str = "") -> dict:
         "start_date": start,
         "end_date": end,
         "paid_out": bool(doc.get("paid_out", False)),
-        "payment_link": payment_link,
+        "payment_link": resolve_payment_link(settings, doc["group_id"]) if settings else "",
         **nums,
     }
 
@@ -123,7 +123,7 @@ async def create_investment(payload: InvestmentCreate, user: Annotated[dict, Dep
         doc["id"],
         f"{group['code']} / {modality['name']} — aguardando confirmação de pagamento",
     )
-    return project(doc, today_br(), settings["payment_link"])
+    return project(doc, today_br(), settings)
 
 
 @router.get("", response_model=list[InvestmentOut])
@@ -134,7 +134,7 @@ async def list_investments(user: Annotated[dict, Depends(current_user)]):
     out = []
     for doc in docs:
         doc = await _auto_complete(doc, reference)
-        out.append(project(doc, reference, settings["payment_link"]))
+        out.append(project(doc, reference, settings))
     return out
 
 
@@ -146,7 +146,7 @@ async def dashboard(user: Annotated[dict, Depends(current_user)]):
     items = []
     for doc in docs:
         doc = await _auto_complete(doc, reference)
-        items.append(project(doc, reference, settings["payment_link"]))
+        items.append(project(doc, reference, settings))
 
     counted = [i for i in items if i["status"] in ("ativo", "concluido")]
     total_invested = money(sum(i["amount"] for i in counted if i["status"] == "ativo"))
@@ -232,7 +232,7 @@ async def investment_detail(investment_id: str, user: Annotated[dict, Depends(cu
     reference = today_br()
     doc = await _auto_complete(doc, reference)
     settings = await get_settings()
-    item = project(doc, reference, settings["payment_link"])
+    item = project(doc, reference, settings)
 
     start = _to_date(doc.get("start_date")) or reference
     days = business_day_series(start, doc["business_days"])

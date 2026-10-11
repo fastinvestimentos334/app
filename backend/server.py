@@ -13,7 +13,7 @@ load_dotenv(ROOT_DIR / ".env")
 
 # MongoDB connection
 from lib.db import client, ensure_indexes  # noqa: E402
-from routers import admin, auth, catalog, investments, withdrawals  # noqa: E402
+from routers import admin, auth, catalog, cron, investments, withdrawals  # noqa: E402
 
 
 @asynccontextmanager
@@ -38,6 +38,7 @@ api_router.include_router(catalog.router)
 api_router.include_router(investments.router)
 api_router.include_router(withdrawals.router)
 api_router.include_router(admin.router)
+api_router.include_router(cron.router)
 
 app.add_middleware(
     CORSMiddleware,

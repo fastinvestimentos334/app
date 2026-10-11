@@ -57,6 +57,25 @@ Fuso de referência: **America/Sao_Paulo** (rollover às 00h).
 ## Credenciais
 Ver `memory/test_credentials.md`. Seed: `cd /app/backend && python seed.py` (idempotente).
 
+## Links de pagamento e suporte (configuráveis no admin)
+- `settings.payment_link` — link padrão do checkout.
+- `settings.group_payment_links` — mapa `group_id → URL`, **um link de checkout por grupo**
+  (GR50…GR1000). Em branco, o grupo cai no link padrão. Resolvido em
+  `lib/security.resolve_payment_link()` e devolvido em `InvestmentOut.payment_link`.
+- `settings.whatsapp_link` — link de suporte completo (override). Em branco, o servidor monta
+  `wa.me/<numero>?text=<mensagem>` via `resolve_support_link()`. Exposto em `/api/catalog` e
+  consumido pelo botão flutuante em todas as páginas.
+- Validação: links devem começar com `http://` ou `https://`; grupo inexistente → 400.
+
+## Apuração diária automática (cron da plataforma)
+- `.emergent/crons.yml` → `daily-accrual`, `0 0 * * *` no fuso `America/Sao_Paulo`.
+- Endpoint: `POST /api/cron/daily-accrual`, autenticado por `Authorization: Bearer
+  $WEBHOOK_CRON_SECRET` (em `backend/.env`); responde 2xx imediatamente e executa em background.
+- Idempotência: `cron_runs.run_id` evita reprocessar entregas duplicadas; `daily_accruals` tem um
+  snapshot por `(investment_id, reference_date)`, impedindo duplicidade de lançamentos.
+- Efeitos: grava o apurado do dia por investimento, faz o rollover `ativo → concluido` no
+  vencimento (uma única vez) e registra `apuracao.diaria` na auditoria.
+
 ## Sistema visual (refinamento premium)
 - Base grafite `#1C1E21` (65%), esmeralda `#004D40` (25%), menta `#00E676` (10%).
 - Superfícies: cartões com gradiente `#24272C → #1B1E22`, bordas hairline `white/[0.07]` e sombra

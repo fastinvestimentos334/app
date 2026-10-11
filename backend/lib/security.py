@@ -7,6 +7,7 @@ import secrets
 import uuid
 from datetime import timedelta
 from typing import Annotated
+from urllib.parse import quote
 
 from fastapi import Cookie, Depends, HTTPException, Response
 
@@ -123,10 +124,28 @@ DEFAULT_SETTINGS = {
     "key": "global",
     "whatsapp_number": "5511999999999",
     "whatsapp_message": "Olá! Preciso de atendimento da FAST INVESTIMENTOS.",
+    "whatsapp_link": "",
     "payment_link": "https://pagamento.fastinvestimentos.com.br/checkout",
+    "group_payment_links": {},
     "support_email": "atendimento@fastinvestimentos.com.br",
     "company_name": "FAST INVESTIMENTOS",
 }
+
+
+def resolve_payment_link(settings: dict, group_id: str) -> str:
+    """Link específico do grupo quando o administrador definiu um; senão, o link geral."""
+    per_group = settings.get("group_payment_links") or {}
+    return (per_group.get(group_id) or "").strip() or settings.get("payment_link", "")
+
+
+def resolve_support_link(settings: dict) -> str:
+    """Link de suporte: override completo do administrador ou wa.me montado pelo número."""
+    override = (settings.get("whatsapp_link") or "").strip()
+    if override:
+        return override
+    number = "".join(ch for ch in settings.get("whatsapp_number", "") if ch.isdigit())
+    message = settings.get("whatsapp_message", "")
+    return f"https://wa.me/{number}?text={quote(message)}"
 
 
 async def get_settings() -> dict:

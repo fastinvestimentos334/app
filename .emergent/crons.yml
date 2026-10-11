@@ -1,0 +1,9 @@
+crons:
+  - name: daily-accrual
+    description: "Apura os rendimentos de todos os investimentos ativos às 00h de Brasília"
+    cron: "0 0 * * *"
+    timezone: "America/Sao_Paulo"
+    # Cron endpoints must ack 2xx immediately; enqueue/background the actual work.
+    endpoint: "{{BASE_URL}}/api/cron/daily-accrual"
+    method: POST
+    enabled: true

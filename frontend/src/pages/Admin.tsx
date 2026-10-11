@@ -33,6 +33,7 @@ import { apiDelete, apiGet, apiPost, apiPut } from "@/lib/api";
 import { apiErrorMessage, brl, dateBR, dateTimeBR, maskCpf, STATUS_LABELS } from "@/lib/format";
 import { queryClient } from "@/lib/queryClient";
 import { endSession } from "@/lib/session";
+import { useCatalog } from "@/hooks/useAppData";
 import type {
   AdminClient,
   AdminSettings,
@@ -45,6 +46,8 @@ import type {
 
 export default function Admin() {
   const navigate = useNavigate();
+  const { data: catalog } = useCatalog();
+  const groupList = catalog?.groups ?? [];
   const [search, setSearch] = useState("");
   const [decision, setDecision] = useState<{ w: Withdrawal; action: "approve" | "reject" } | null>(null);
   const [justification, setJustification] = useState("");
@@ -426,7 +429,8 @@ export default function Admin() {
             <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-5 sm:p-7">
               <p className="text-sm font-semibold text-white">Parâmetros operacionais</p>
               <p className="mt-1 text-xs text-[#8A94A0]">
-                O link de pagamento e o número de WhatsApp são aplicados imediatamente em toda a plataforma.
+                O link de pagamento, os links por grupo e o atendimento são aplicados imediatamente em toda a
+                plataforma.
               </p>
               <form
                 className="mt-5 space-y-4"
@@ -437,7 +441,7 @@ export default function Admin() {
               >
                 <div>
                   <Label htmlFor="payment_link" className="text-[#C0C8D1]">
-                    Link de pagamento do checkout
+                    Link de pagamento padrão (usado quando o grupo não tem link próprio)
                   </Label>
                   <Input
                     id="payment_link"
@@ -447,6 +451,70 @@ export default function Admin() {
                     className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
                   />
                 </div>
+
+                {/* Link de checkout individual por grupo */}
+                <div className="rounded-xl border border-white/[0.08] bg-[#15181B] p-4 sm:p-5">
+                  <div className="flex flex-wrap items-end justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-semibold text-white">Link de checkout por grupo</p>
+                      <p className="mt-1 text-xs text-[#8A94A0]">
+                        Defina um link exclusivo para cada grupo. Em branco, o grupo usa o link padrão acima.
+                      </p>
+                    </div>
+                    <span className="font-mono text-[11px] text-[#00E676]" data-testid="admin-group-links-count">
+                      {Object.values(form?.group_payment_links ?? {}).filter((v) => v.trim()).length}/
+                      {groupList.length} personalizados
+                    </span>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    {groupList.map((group) => (
+                      <div
+                        key={group.id}
+                        className="flex flex-col gap-2 border-t border-white/[0.06] pt-3 sm:flex-row sm:items-center sm:gap-4"
+                      >
+                        <div className="flex shrink-0 items-center justify-between sm:w-40">
+                          <span className="font-heading text-sm font-semibold text-white">{group.code}</span>
+                          <span className="font-mono text-xs text-[#8A94A0]">{brl(group.amount)}</span>
+                        </div>
+                        <Input
+                          data-testid={`admin-group-link-input-${group.id.toLowerCase()}`}
+                          value={form?.group_payment_links?.[group.id] ?? ""}
+                          placeholder={form?.payment_link || "https://..."}
+                          onChange={(e) =>
+                            form &&
+                            setSettingsForm({
+                              ...form,
+                              group_payment_links: {
+                                ...(form.group_payment_links ?? {}),
+                                [group.id]: e.target.value,
+                              },
+                            })
+                          }
+                          className="h-11 flex-1 rounded-lg border-white/[0.09] bg-[#1C1F23] text-sm text-white transition-colors duration-200 focus:border-[#00E676]/50"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="whatsapp_link" className="text-[#C0C8D1]">
+                    Link do suporte (WhatsApp ou outro canal)
+                  </Label>
+                  <Input
+                    id="whatsapp_link"
+                    data-testid="admin-whatsapp-link-input"
+                    value={form?.whatsapp_link ?? ""}
+                    placeholder="https://wa.me/5511999999999 — em branco, usa o número abaixo"
+                    onChange={(e) => form && setSettingsForm({ ...form, whatsapp_link: e.target.value })}
+                    className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
+                  />
+                  <p className="mt-2 text-xs text-[#8A94A0]">
+                    Este link é usado pelo botão flutuante de atendimento em todas as páginas.
+                  </p>
+                </div>
+
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <Label htmlFor="whatsapp_number" className="text-[#C0C8D1]">
