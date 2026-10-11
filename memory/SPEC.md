@@ -56,3 +56,16 @@ Fuso de referência: **America/Sao_Paulo** (rollover às 00h).
 
 ## Credenciais
 Ver `memory/test_credentials.md`. Seed: `cd /app/backend && python seed.py` (idempotente).
+
+## Sistema visual (refinamento premium)
+- Base grafite `#1C1E21` (65%), esmeralda `#004D40` (25%), menta `#00E676` (10%).
+- Superfícies: cartões com gradiente `#24272C → #1B1E22`, bordas hairline `white/[0.07]` e sombra
+  difusa; superfícies internas em `#15181B`; painéis esmeralda com gradiente `#014A3E → #012E27`.
+- Tipografia: Sora (títulos, tracking -0.025em), DM Sans (texto), JetBrains Mono com
+  `tabular-nums` em todo valor monetário para alinhamento em coluna.
+- Rótulos overline em menta (11px, tracking 0.2em, maiúsculas); réguas finas substituem caixas
+  pesadas no FAQ, transparência e "como funciona".
+- Movimento discreto: `animate-fade-up`, `animate-rise`, `animate-draw` (sparkline do hero);
+  transições por propriedade específica, sem `transition: all` e sem pulsação no CTA.
+- Logo oficial aplicada com `mix-blend-lighten` para dissolver o fundo escuro do PNG.
+- Limpeza de dados de teste: `cd /app/backend && python cleanup_test_data.py`.

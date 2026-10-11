@@ -84,12 +84,12 @@ export default function Legal({ kind }: { kind: "termos" | "privacidade" }) {
         >
           {content.title}
         </h1>
-        <Card className="mt-6 border-[#2D3239] bg-[#22252A] p-5 sm:p-8">
+        <Card className="mt-6 border-white/[0.08] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_28px_70px_-36px_rgba(0,0,0,1)] p-5 sm:p-8">
           <div className="space-y-6">
             {content.sections.map((section) => (
               <section key={section.h}>
                 <h2 className="text-base font-semibold text-white">{section.h}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-[#CBD5E1]">{section.p}</p>
+                <p className="mt-2 text-sm leading-relaxed text-[#C0C8D1]">{section.p}</p>
               </section>
             ))}
           </div>

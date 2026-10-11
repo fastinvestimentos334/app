@@ -32,9 +32,9 @@ export default function Login() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-[#1C1E21] px-4 py-10 pb-28">
       <BrandLogo className="h-12 sm:h-14" />
-      <Card className="mt-7 w-full max-w-md border-[#2D3239] bg-[#22252A] p-6 sm:p-8">
+      <Card className="mt-7 w-full max-w-md border-white/[0.08] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_28px_70px_-36px_rgba(0,0,0,1)] p-6 sm:p-8">
         <h1 className="text-xl font-bold text-white sm:text-2xl">Entrar na sua conta</h1>
-        <p className="mt-2 text-sm text-[#94A3B8]">Acesse seu painel para acompanhar seus investimentos.</p>
+        <p className="mt-2 text-sm text-[#8A94A0]">Acesse seu painel para acompanhar seus investimentos.</p>
 
         <form
           className="mt-6 space-y-4"
@@ -48,7 +48,7 @@ export default function Login() {
           }}
         >
           <div>
-            <Label htmlFor="email" className="text-[#CBD5E1]">
+            <Label htmlFor="email" className="text-[#C0C8D1]">
               E-mail
             </Label>
             <Input
@@ -59,11 +59,11 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="seu@email.com"
-              className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+              className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
             />
           </div>
           <div>
-            <Label htmlFor="password" className="text-[#CBD5E1]">
+            <Label htmlFor="password" className="text-[#C0C8D1]">
               Senha
             </Label>
             <Input
@@ -74,7 +74,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+              className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
             />
           </div>
           <Button
@@ -96,13 +96,13 @@ export default function Login() {
           >
             Esqueci minha senha
           </Link>
-          <p className="text-[#94A3B8]">
+          <p className="text-[#8A94A0]">
             Ainda não tem conta?{" "}
             <Link to="/cadastro" data-testid="login-register-link" className="font-semibold text-[#00E676]">
               Criar minha conta
             </Link>
           </p>
-          <Link to="/" data-testid="login-home-link" className="text-[#6B7280] hover:text-[#94A3B8]">
+          <Link to="/" data-testid="login-home-link" className="text-[#6B7280] hover:text-[#8A94A0]">
             Voltar para a página inicial
           </Link>
         </div>

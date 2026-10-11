@@ -21,7 +21,7 @@ export default function Checkout() {
   return (
     <AppShell>
       <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Checkout do aporte</h1>
-      <p className="mt-2 text-sm text-[#94A3B8]">
+      <p className="mt-2 text-sm text-[#8A94A0]">
         Conclua o pagamento pelo link oficial. A ativação ocorre após a confirmação pela administração.
       </p>
 
@@ -32,37 +32,37 @@ export default function Checkout() {
       )}
 
       {isLoading && (
-        <p className="mt-6 text-sm text-[#94A3B8]" data-testid="checkout-loading">
+        <p className="mt-6 text-sm text-[#8A94A0]" data-testid="checkout-loading">
           Carregando dados do aporte...
         </p>
       )}
 
-      <Card className="mt-6 border-[#2D3239] bg-[#22252A] p-5 sm:p-7" data-testid="checkout-summary">
+      <Card className="mt-6 border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-5 sm:p-7" data-testid="checkout-summary">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="font-heading text-xl font-bold text-white">{investment?.group_code ?? "—"}</p>
-            <p className="mt-1 text-xs text-[#94A3B8]" data-testid="checkout-modality-line">
+            <p className="mt-1 text-xs text-[#8A94A0]" data-testid="checkout-modality-line">
               {investment ? `${investment.modality_name} • ${pct(investment.yield_percent)} no período` : "—"}
             </p>
           </div>
           <p className="font-mono text-2xl font-bold text-[#00E676]">{brl(investment?.amount ?? 0)}</p>
         </div>
 
-        <dl className="mt-5 grid gap-3 border-t border-[#2D3239] pt-5 sm:grid-cols-3">
+        <dl className="mt-5 grid gap-3 border-t border-white/[0.08] pt-5 sm:grid-cols-3">
           <div>
-            <dt className="text-xs text-[#94A3B8]">Projeção do período</dt>
+            <dt className="text-xs text-[#8A94A0]">Projeção do período</dt>
             <dd className="mt-0.5 font-mono text-base font-bold text-white">
               {pct(investment?.yield_percent ?? 0)}
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-[#94A3B8]">Rendimento projetado</dt>
+            <dt className="text-xs text-[#8A94A0]">Rendimento projetado</dt>
             <dd className="mt-0.5 font-mono text-base font-bold text-white">
               {brl(investment?.projected_yield ?? 0)}
             </dd>
           </div>
           <div>
-            <dt className="text-xs text-[#94A3B8]">Total projetado</dt>
+            <dt className="text-xs text-[#8A94A0]">Total projetado</dt>
             <dd className="mt-0.5 font-mono text-base font-bold text-[#00E676]">
               {brl(investment?.projected_total ?? 0)}
             </dd>
@@ -87,7 +87,7 @@ export default function Checkout() {
         </p>
       </Card>
 
-      <Card className="mt-4 border-[#004D40] bg-[#004D40]/30 p-5" data-testid="checkout-next-steps">
+      <Card className="mt-4 border-[#00E676]/18 bg-gradient-to-br from-[#014036] to-[#012A23] p-5" data-testid="checkout-next-steps">
         <p className="text-sm font-semibold text-white">Próximos passos</p>
         <ul className="mt-3 space-y-2.5 text-sm text-[#A7F3D0]">
           {[

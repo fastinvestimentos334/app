@@ -151,11 +151,11 @@ export default function Admin() {
 
   return (
     <div className="min-h-svh bg-[#1C1E21]">
-      <header className="sticky top-0 z-30 border-b border-[#2D3239] bg-[#141618]/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-white/[0.07] bg-[#15181B]/92 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
             <BrandLogo to="/admin" className="h-8 sm:h-10" testid="admin-brand-logo" />
-            <Badge className="hidden bg-[#004D40] text-[#A7F3D0] sm:inline-flex">Administração</Badge>
+            <Badge className="hidden border border-[#00E676]/25 bg-[#00E676]/10 text-[#A7F3D0] sm:inline-flex">Administração</Badge>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -185,26 +185,26 @@ export default function Admin() {
 
       <main className="mx-auto max-w-7xl px-4 pt-6 pb-28 sm:px-6">
         <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Painel administrativo</h1>
-        <p className="mt-2 text-sm text-[#94A3B8]" data-testid="admin-reference-date">
+        <p className="mt-2 text-sm text-[#8A94A0]" data-testid="admin-reference-date">
           Data de referência: {dateBR(summary.data?.reference_date)} (America/Sao_Paulo)
         </p>
 
         <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {kpis.map((kpi) => (
-            <Card key={kpi.label} className="border-[#2D3239] bg-[#22252A] p-4" data-testid={kpi.testid}>
-              <p className="text-xs text-[#94A3B8]">{kpi.label}</p>
+            <Card key={kpi.label} className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4" data-testid={kpi.testid}>
+              <p className="text-xs text-[#8A94A0]">{kpi.label}</p>
               <p className="mt-1 font-mono text-2xl font-bold text-white">{kpi.value}</p>
             </Card>
           ))}
         </div>
 
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          <Card className="border-[#004D40] bg-[#004D40]/35 p-4" data-testid="admin-kpi-custody">
+          <Card className="border-[#00E676]/18 bg-gradient-to-br from-[#014A3E] to-[#012E27] shadow-[0_18px_50px_-30px_rgba(0,230,118,0.38)] p-4" data-testid="admin-kpi-custody">
             <p className="text-xs text-[#A7F3D0]">Volume custodiado</p>
             <p className="mt-1 font-mono text-xl font-bold text-white">{brl(summary.data?.custody_total ?? 0)}</p>
           </Card>
-          <Card className="border-[#2D3239] bg-[#22252A] p-4" data-testid="admin-kpi-accrued">
-            <p className="text-xs text-[#94A3B8]">Rendimento apurado total</p>
+          <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4" data-testid="admin-kpi-accrued">
+            <p className="text-xs text-[#8A94A0]">Rendimento apurado total</p>
             <p className="mt-1 font-mono text-xl font-bold text-[#00E676]">
               {brl(summary.data?.accrued_total ?? 0)}
             </p>
@@ -212,7 +212,7 @@ export default function Admin() {
         </div>
 
         <Tabs defaultValue="saques" className="mt-8">
-          <TabsList className="flex w-full flex-wrap gap-1 bg-[#141618]" data-testid="admin-tabs">
+          <TabsList className="flex w-full flex-wrap gap-1 bg-[#15181B]" data-testid="admin-tabs">
             <TabsTrigger value="saques" data-testid="admin-tab-withdrawals" className="min-h-11 flex-1">
               <Wallet className="mr-2 h-4 w-4" /> Saques
             </TabsTrigger>
@@ -233,21 +233,21 @@ export default function Admin() {
           {/* SAQUES */}
           <TabsContent value="saques" className="mt-5 space-y-3" data-testid="admin-withdrawals-panel">
             {(withdrawals.data ?? []).length === 0 ? (
-              <Card className="border-[#2D3239] bg-[#22252A] p-6 text-center">
-                <p className="text-sm text-[#94A3B8]">Nenhuma solicitação de resgate registrada.</p>
+              <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-6 text-center">
+                <p className="text-sm text-[#8A94A0]">Nenhuma solicitação de resgate registrada.</p>
               </Card>
             ) : (
               withdrawals.data?.map((w) => (
                 <Card
                   key={w.id}
-                  className="border-[#2D3239] bg-[#22252A] p-4"
+                  className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4"
                   data-testid={`admin-withdrawal-${w.id}`}
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <p className="font-semibold text-white">{w.user_name}</p>
                       <p className="mt-1 font-mono text-lg font-bold text-[#00E676]">{brl(w.amount)}</p>
-                      <p className="mt-1 text-xs text-[#94A3B8]">
+                      <p className="mt-1 text-xs text-[#8A94A0]">
                         PIX {w.pix_key} • {dateTimeBR(w.created_at)}
                       </p>
                     </div>
@@ -264,7 +264,7 @@ export default function Admin() {
                     </Badge>
                   </div>
                   {w.justification && (
-                    <p className="mt-3 rounded-lg border border-[#2D3239] bg-[#141618] p-3 text-xs text-[#CBD5E1]">
+                    <p className="mt-3 rounded-lg border border-white/[0.08] bg-[#15181B] p-3 text-xs text-[#C0C8D1]">
                       {w.justification}
                     </p>
                   )}
@@ -317,14 +317,14 @@ export default function Admin() {
           {/* INVESTIMENTOS */}
           <TabsContent value="investimentos" className="mt-5 space-y-3" data-testid="admin-investments-panel">
             {(investments.data ?? []).length === 0 ? (
-              <Card className="border-[#2D3239] bg-[#22252A] p-6 text-center">
-                <p className="text-sm text-[#94A3B8]">Nenhum investimento registrado.</p>
+              <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-6 text-center">
+                <p className="text-sm text-[#8A94A0]">Nenhum investimento registrado.</p>
               </Card>
             ) : (
               investments.data?.map((inv) => (
                 <Card
                   key={inv.id}
-                  className="border-[#2D3239] bg-[#22252A] p-4"
+                  className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4"
                   data-testid={`admin-investment-${inv.id}`}
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
@@ -332,7 +332,7 @@ export default function Admin() {
                       <p className="font-semibold text-white">
                         {inv.group_code} — {inv.user_name}
                       </p>
-                      <p className="mt-1 text-xs text-[#94A3B8]">
+                      <p className="mt-1 text-xs text-[#8A94A0]">
                         {inv.modality_name} • {brl(inv.amount)} • apurado {brl(inv.accrued_yield)} de{" "}
                         {brl(inv.projected_yield)}
                       </p>
@@ -341,7 +341,7 @@ export default function Admin() {
                         {inv.elapsed_business_days}/{inv.business_days} dias úteis
                       </p>
                     </div>
-                    <Badge className="bg-[#2D3239] text-[#CBD5E1]">{STATUS_LABELS[inv.status]}</Badge>
+                    <Badge className="border border-white/10 bg-white/[0.06] text-[#C0C8D1]">{STATUS_LABELS[inv.status]}</Badge>
                   </div>
                   {inv.status === "aguardando_pagamento" && (
                     <Button
@@ -366,24 +366,24 @@ export default function Admin() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar por nome, e-mail ou CPF"
-              className="h-12 border-[#2D3239] bg-[#141618] text-white"
+              className="h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
             />
             <div className="mt-4 space-y-3">
               {(clients.data ?? []).length === 0 ? (
-                <Card className="border-[#2D3239] bg-[#22252A] p-6 text-center">
-                  <p className="text-sm text-[#94A3B8]">Nenhum cliente encontrado.</p>
+                <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-6 text-center">
+                  <p className="text-sm text-[#8A94A0]">Nenhum cliente encontrado.</p>
                 </Card>
               ) : (
                 clients.data?.map((c) => (
                   <Card
                     key={c.user.id}
-                    className="border-[#2D3239] bg-[#22252A] p-4"
+                    className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4"
                     data-testid={`admin-client-${c.user.id}`}
                   >
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <p className="font-semibold text-white">{c.user.full_name}</p>
-                        <p className="mt-1 text-xs text-[#94A3B8]">
+                        <p className="mt-1 text-xs text-[#8A94A0]">
                           {c.user.email} • CPF {maskCpf(c.user.cpf)}
                         </p>
                         <p className="mt-1 text-xs text-[#6B7280]">
@@ -401,17 +401,17 @@ export default function Admin() {
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
-                    <div className="mt-3 grid grid-cols-3 gap-3 border-t border-[#2D3239] pt-3">
+                    <div className="mt-3 grid grid-cols-3 gap-3 border-t border-white/[0.08] pt-3">
                       <div>
-                        <p className="text-xs text-[#94A3B8]">Investimentos</p>
+                        <p className="text-xs text-[#8A94A0]">Investimentos</p>
                         <p className="font-mono text-sm font-bold text-white">{c.investments}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-[#94A3B8]">Total investido</p>
+                        <p className="text-xs text-[#8A94A0]">Total investido</p>
                         <p className="font-mono text-sm font-bold text-white">{brl(c.total_invested)}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-[#94A3B8]">Apurado</p>
+                        <p className="text-xs text-[#8A94A0]">Apurado</p>
                         <p className="font-mono text-sm font-bold text-[#00E676]">{brl(c.accrued_result)}</p>
                       </div>
                     </div>
@@ -423,9 +423,9 @@ export default function Admin() {
 
           {/* CONFIGURAÇÕES */}
           <TabsContent value="config" className="mt-5" data-testid="admin-settings-panel">
-            <Card className="border-[#2D3239] bg-[#22252A] p-5 sm:p-7">
+            <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-5 sm:p-7">
               <p className="text-sm font-semibold text-white">Parâmetros operacionais</p>
-              <p className="mt-1 text-xs text-[#94A3B8]">
+              <p className="mt-1 text-xs text-[#8A94A0]">
                 O link de pagamento e o número de WhatsApp são aplicados imediatamente em toda a plataforma.
               </p>
               <form
@@ -436,7 +436,7 @@ export default function Admin() {
                 }}
               >
                 <div>
-                  <Label htmlFor="payment_link" className="text-[#CBD5E1]">
+                  <Label htmlFor="payment_link" className="text-[#C0C8D1]">
                     Link de pagamento do checkout
                   </Label>
                   <Input
@@ -444,12 +444,12 @@ export default function Admin() {
                     data-testid="admin-payment-link-input"
                     value={form?.payment_link ?? ""}
                     onChange={(e) => form && setSettingsForm({ ...form, payment_link: e.target.value })}
-                    className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+                    className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
                   />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <Label htmlFor="whatsapp_number" className="text-[#CBD5E1]">
+                    <Label htmlFor="whatsapp_number" className="text-[#C0C8D1]">
                       WhatsApp oficial (com DDI)
                     </Label>
                     <Input
@@ -458,11 +458,11 @@ export default function Admin() {
                       value={form?.whatsapp_number ?? ""}
                       onChange={(e) => form && setSettingsForm({ ...form, whatsapp_number: e.target.value })}
                       placeholder="5511999999999"
-                      className="mt-2 h-12 border-[#2D3239] bg-[#141618] font-mono text-white"
+                      className="mt-2 h-12 border-white/[0.08] bg-[#15181B] font-mono text-white"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="support_email" className="text-[#CBD5E1]">
+                    <Label htmlFor="support_email" className="text-[#C0C8D1]">
                       E-mail de atendimento
                     </Label>
                     <Input
@@ -471,12 +471,12 @@ export default function Admin() {
                       data-testid="admin-support-email-input"
                       value={form?.support_email ?? ""}
                       onChange={(e) => form && setSettingsForm({ ...form, support_email: e.target.value })}
-                      className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+                      className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
                     />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="whatsapp_message" className="text-[#CBD5E1]">
+                  <Label htmlFor="whatsapp_message" className="text-[#C0C8D1]">
                     Mensagem inicial do WhatsApp
                   </Label>
                   <Input
@@ -484,11 +484,11 @@ export default function Admin() {
                     data-testid="admin-whatsapp-message-input"
                     value={form?.whatsapp_message ?? ""}
                     onChange={(e) => form && setSettingsForm({ ...form, whatsapp_message: e.target.value })}
-                    className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+                    className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="company_name" className="text-[#CBD5E1]">
+                  <Label htmlFor="company_name" className="text-[#C0C8D1]">
                     Nome da empresa
                   </Label>
                   <Input
@@ -496,7 +496,7 @@ export default function Admin() {
                     data-testid="admin-company-name-input"
                     value={form?.company_name ?? ""}
                     onChange={(e) => form && setSettingsForm({ ...form, company_name: e.target.value })}
-                    className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+                    className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
                   />
                 </div>
                 <Button
@@ -515,14 +515,14 @@ export default function Admin() {
           {/* AUDITORIA */}
           <TabsContent value="auditoria" className="mt-5 space-y-2" data-testid="admin-audit-panel">
             {(audit.data ?? []).length === 0 ? (
-              <Card className="border-[#2D3239] bg-[#22252A] p-6 text-center">
-                <p className="text-sm text-[#94A3B8]">Nenhum registro de auditoria.</p>
+              <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-6 text-center">
+                <p className="text-sm text-[#8A94A0]">Nenhum registro de auditoria.</p>
               </Card>
             ) : (
               audit.data?.map((log) => (
                 <Card
                   key={log.id}
-                  className="border-[#2D3239] bg-[#22252A] p-4"
+                  className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4"
                   data-testid={`admin-audit-${log.id}`}
                 >
                   <div className="flex flex-wrap items-start justify-between gap-2">
@@ -530,7 +530,7 @@ export default function Admin() {
                     <p className="text-xs text-[#6B7280]">{dateTimeBR(log.created_at)}</p>
                   </div>
                   <p className="mt-1.5 text-sm text-white">{log.details || "—"}</p>
-                  <p className="mt-1 text-xs text-[#94A3B8]">
+                  <p className="mt-1 text-xs text-[#8A94A0]">
                     {log.actor_email} • {log.target_type}:{log.target_id.slice(0, 8)}
                   </p>
                 </Card>
@@ -542,12 +542,12 @@ export default function Admin() {
 
       {/* Decision dialog */}
       <Dialog open={!!decision} onOpenChange={(open) => !open && setDecision(null)}>
-        <DialogContent className="border-[#2D3239] bg-[#141618] sm:max-w-md">
+        <DialogContent className="border-white/[0.08] bg-[#15181B] sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-white">
               {decision?.action === "approve" ? "Aprovar solicitação" : "Rejeitar solicitação"}
             </DialogTitle>
-            <DialogDescription className="text-[#94A3B8]">
+            <DialogDescription className="text-[#8A94A0]">
               {decision?.w.user_name} — {brl(decision?.w.amount ?? 0)}. A justificativa é obrigatória e fica
               registrada na auditoria. A aprovação não constitui confirmação de pagamento.
             </DialogDescription>
@@ -557,7 +557,7 @@ export default function Admin() {
             value={justification}
             onChange={(e) => setJustification(e.target.value)}
             placeholder="Descreva a análise realizada..."
-            className="min-h-24 border-[#2D3239] bg-[#22252A] text-white"
+            className="min-h-24 border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] text-white"
           />
           <Button
             size="lg"

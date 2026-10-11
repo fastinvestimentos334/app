@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { ArrowUpRight } from "lucide-react";
 import { brl, dateBR, pct, STATUS_LABELS } from "@/lib/format";
 import type { Investment } from "@/lib/types";
 
 const STATUS_STYLE: Record<string, string> = {
-  ativo: "bg-[#00E676] text-[#0A1F14]",
-  aguardando_pagamento: "bg-[#FFD740] text-[#1C1E21]",
-  concluido: "bg-[#004D40] text-[#A7F3D0]",
-  cancelado: "bg-[#FF5252]/20 text-[#FF8A80]",
+  ativo: "border-[#00E676]/30 bg-[#00E676]/10 text-[#00E676]",
+  aguardando_pagamento: "border-[#FFD740]/30 bg-[#FFD740]/10 text-[#FFD740]",
+  concluido: "border-[#00E676]/20 bg-[#00E676]/[0.06] text-[#A7F3D0]",
+  cancelado: "border-[#FF5252]/30 bg-[#FF5252]/10 text-[#FF8A80]",
 };
 
 export default function InvestmentCard({ investment }: { investment: Investment }) {
@@ -18,67 +16,74 @@ export default function InvestmentCard({ investment }: { investment: Investment 
     : 0;
 
   return (
-    <Card
-      className="border-[#2D3239] bg-[#22252A] p-5"
+    <article
+      className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] transition-colors duration-300 hover:border-white/[0.14]"
       data-testid={`investment-card-${investment.id}`}
     >
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <p className="font-heading text-lg font-bold text-white">{investment.group_code}</p>
-          <p className="mt-1 text-xs text-[#94A3B8]">
-            {investment.modality_name} • {investment.business_days} dias úteis • {pct(investment.yield_percent)}{" "}
-            no período
-          </p>
-        </div>
-        <Badge
-          className={STATUS_STYLE[investment.status] ?? "bg-[#2D3239] text-white"}
-          data-testid={`investment-status-${investment.id}`}
-        >
-          {STATUS_LABELS[investment.status] ?? investment.status}
-        </Badge>
-      </div>
+      {/* hairline accent on the leading edge */}
+      <span
+        className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-[#00E676]/50 to-transparent"
+        aria-hidden
+      />
 
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <div>
-          <p className="text-xs text-[#94A3B8]">Valor inicial</p>
-          <p className="mt-0.5 font-mono text-sm font-bold text-white">{brl(investment.amount)}</p>
-        </div>
-        <div>
-          <p className="text-xs text-[#94A3B8]">Apurado</p>
-          <p className="mt-0.5 font-mono text-sm font-bold text-[#00E676]">{brl(investment.accrued_yield)}</p>
-        </div>
-        <div>
-          <p className="text-xs text-[#94A3B8]">Projetado</p>
-          <p className="mt-0.5 font-mono text-sm font-bold text-white">{brl(investment.projected_yield)}</p>
-        </div>
-        <div>
-          <p className="text-xs text-[#94A3B8]">Vencimento</p>
-          <p className="mt-0.5 font-mono text-sm font-bold text-white">{dateBR(investment.end_date)}</p>
-        </div>
-      </div>
-
-      <div className="mt-4">
-        <div className="flex items-center justify-between text-xs text-[#94A3B8]">
-          <span>
-            Evolução: {investment.elapsed_business_days}/{investment.business_days} dias úteis
+      <div className="p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="font-heading text-lg font-semibold text-white sm:text-xl">
+              {investment.group_code}
+            </p>
+            <p className="mt-1.5 text-xs text-[#8A94A0]">
+              {investment.modality_name} · {pct(investment.yield_percent)} no período
+            </p>
+          </div>
+          <span
+            className={`shrink-0 rounded-full border px-3 py-1 text-[11px] font-medium tracking-wide ${
+              STATUS_STYLE[investment.status] ?? "border-white/10 bg-white/5 text-white"
+            }`}
+            data-testid={`investment-status-${investment.id}`}
+          >
+            {STATUS_LABELS[investment.status] ?? investment.status}
           </span>
-          <span className="font-mono">{progress}%</span>
         </div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#141618]">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-[#004D40] to-[#00E676] transition-[width] duration-500"
-            style={{ width: `${progress}%` }}
-          />
+
+        <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
+          {[
+            { label: "Valor inicial", value: brl(investment.amount), tone: "text-white" },
+            { label: "Apurado", value: brl(investment.accrued_yield), tone: "text-[#00E676]" },
+            { label: "Projetado", value: brl(investment.projected_yield), tone: "text-[#D6DCE4]" },
+            { label: "Vencimento", value: dateBR(investment.end_date), tone: "text-[#D6DCE4]" },
+          ].map((item) => (
+            <div key={item.label}>
+              <p className="text-[11px] tracking-[0.08em] text-[#7D8794] uppercase">{item.label}</p>
+              <p className={`mt-1 font-mono text-[15px] font-semibold ${item.tone}`}>{item.value}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6">
+          <div className="flex items-baseline justify-between">
+            <span className="text-[11px] tracking-[0.08em] text-[#7D8794] uppercase">Evolução</span>
+            <span className="font-mono text-xs text-[#9AA5B1]">
+              {investment.elapsed_business_days} / {investment.business_days} dias úteis
+            </span>
+          </div>
+          <div className="mt-2.5 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.08]">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[#00796B] via-[#00E676] to-[#00E676] transition-[width] duration-700 ease-out"
+              style={{ width: `${Math.max(progress, 1.5)}%` }}
+            />
+          </div>
         </div>
       </div>
 
       <Link
         to={`/investimento/${investment.id}`}
         data-testid={`investment-details-link-${investment.id}`}
-        className="mt-4 flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#004D40] text-sm font-semibold text-[#A7F3D0] transition-colors duration-200 hover:bg-[#004D40]"
+        className="flex min-h-12 items-center justify-between border-t border-white/[0.07] px-5 text-sm font-medium text-[#C7CED6] transition-colors duration-200 hover:bg-white/[0.03] hover:text-[#00E676] sm:px-6"
       >
-        Ver detalhes <ArrowRight className="h-4 w-4" />
+        Ver detalhes
+        <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </Link>
-    </Card>
+    </article>
   );
 }

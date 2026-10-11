@@ -18,7 +18,7 @@ export default function SiteHeader() {
   const navigate = useNavigate();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[#2D3239] bg-[#1C1E21]/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-white/[0.07] bg-[#1C1E21]/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <BrandLogo />
 
@@ -28,7 +28,7 @@ export default function SiteHeader() {
               key={link.href}
               href={link.href}
               data-testid={`nav-link-${link.href.replace("#", "")}`}
-              className="text-sm font-medium text-[#CBD5E1] transition-colors duration-200 hover:text-[#00E676]"
+              className="text-sm font-medium text-[#C0C8D1] transition-colors duration-200 hover:text-[#00E676]"
             >
               {link.label}
             </a>
@@ -49,7 +49,7 @@ export default function SiteHeader() {
               <Link
                 to="/login"
                 data-testid="header-login-link"
-                className={buttonVariants({ variant: "outline" }) + " border-[#2D3239] text-white"}
+                className={buttonVariants({ variant: "outline" }) + " border-white/[0.08] text-white"}
               >
                 Entrar
               </Link>
@@ -77,7 +77,7 @@ export default function SiteHeader() {
       </div>
 
       {open && (
-        <div className="border-t border-[#2D3239] bg-[#141618] px-4 pt-3 pb-5 lg:hidden" data-testid="mobile-menu">
+        <div className="border-t border-white/[0.08] bg-[#15181B] px-4 pt-3 pb-5 lg:hidden" data-testid="mobile-menu">
           <nav className="flex flex-col">
             {LINKS.map((link) => (
               <a
@@ -85,7 +85,7 @@ export default function SiteHeader() {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 data-testid={`mobile-nav-link-${link.href.replace("#", "")}`}
-                className="border-b border-[#2D3239] py-3.5 text-base text-[#CBD5E1] transition-colors duration-200 hover:text-[#00E676]"
+                className="border-b border-white/[0.08] py-3.5 text-base text-[#C0C8D1] transition-colors duration-200 hover:text-[#00E676]"
               >
                 {link.label}
               </a>
@@ -105,7 +105,7 @@ export default function SiteHeader() {
                 <Link
                   to="/login"
                   data-testid="mobile-login-link"
-                  className={buttonVariants({ variant: "outline", size: "lg" }) + " border-[#2D3239] text-white"}
+                  className={buttonVariants({ variant: "outline", size: "lg" }) + " border-white/[0.08] text-white"}
                 >
                   Entrar
                 </Link>

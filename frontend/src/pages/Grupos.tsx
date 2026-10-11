@@ -52,12 +52,12 @@ export default function Grupos() {
   return (
     <AppShell>
       <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Grupos de investimento</h1>
-      <p className="mt-2 text-sm text-[#94A3B8]">
+      <p className="mt-2 text-sm text-[#8A94A0]">
         Escolha um grupo, selecione a modalidade de prazo e siga para o checkout.
       </p>
 
       {isLoading && (
-        <p className="mt-6 text-sm text-[#94A3B8]" data-testid="groups-loading">
+        <p className="mt-6 text-sm text-[#8A94A0]" data-testid="groups-loading">
           Carregando grupos...
         </p>
       )}
@@ -72,11 +72,11 @@ export default function Grupos() {
               setSelected(group);
               setModality(modalities[0] ?? null);
             }}
-            className="rounded-xl border border-[#2D3239] bg-[#22252A] p-4 text-left transition-all duration-200 hover:-translate-y-1 hover:border-[#00E676]/60 hover:shadow-[0_0_20px_rgba(0,230,118,0.15)] active:scale-[0.98] sm:p-5"
+            className="rounded-xl border border-white/[0.08] bg-[#22252A] p-4 text-left transition-all duration-200 hover:-translate-y-1 hover:border-[#00E676]/60 hover:shadow-[0_0_20px_rgba(0,230,118,0.15)] active:scale-[0.98] sm:p-5"
           >
             <p className="font-heading text-base font-bold text-white sm:text-lg">{group.code}</p>
             <p className="mt-2 font-mono text-lg font-bold text-[#00E676] sm:text-xl">{brl(group.amount)}</p>
-            <p className="mt-3 flex items-center gap-1 text-xs text-[#94A3B8]">
+            <p className="mt-3 flex items-center gap-1 text-xs text-[#8A94A0]">
               Ver detalhes <ArrowRight className="h-3 w-3" />
             </p>
           </button>
@@ -84,12 +84,12 @@ export default function Grupos() {
       </div>
 
       <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
-        <DialogContent className="max-h-[90svh] overflow-y-auto border-[#2D3239] bg-[#141618] sm:max-w-lg">
+        <DialogContent className="max-h-[90svh] overflow-y-auto border-white/[0.08] bg-[#15181B] sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-xl text-white" data-testid="group-dialog-title">
               {selected?.code} — {brl(selected?.amount ?? 0)}
             </DialogTitle>
-            <DialogDescription className="text-[#94A3B8]">
+            <DialogDescription className="text-[#8A94A0]">
               Selecione a modalidade de prazo para este grupo. A apuração é calculada no servidor, por dia útil.
             </DialogDescription>
           </DialogHeader>
@@ -106,24 +106,24 @@ export default function Grupos() {
                   onClick={() => setModality(m)}
                   className={`w-full rounded-xl border p-4 text-left transition-colors duration-200 ${
                     active
-                      ? "border-[#00E676] bg-[#004D40]/50"
-                      : "border-[#2D3239] bg-[#22252A] hover:border-[#00796B]"
+                      ? "border-[#00E676] bg-[#014A3E]"
+                      : "border-white/[0.08] bg-[#22252A] hover:border-[#00796B]"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-white">{m.name}</p>
                     <Badge className="bg-[#00E676] text-[#0A1F14]">{pct(m.yield_percent)}</Badge>
                   </div>
-                  <p className="mt-2 text-xs leading-relaxed text-[#CBD5E1]">{m.description}</p>
-                  <div className="mt-3 grid grid-cols-2 gap-3 border-t border-[#2D3239] pt-3">
+                  <p className="mt-2 text-xs leading-relaxed text-[#C0C8D1]">{m.description}</p>
+                  <div className="mt-3 grid grid-cols-2 gap-3 border-t border-white/[0.08] pt-3">
                     <div>
-                      <p className="text-xs text-[#94A3B8]">Projeção por dia útil</p>
+                      <p className="text-xs text-[#8A94A0]">Projeção por dia útil</p>
                       <p className="font-mono text-sm font-bold text-white">
                         {brl(((selected?.amount ?? 0) * m.yield_percent) / 100 / m.business_days)}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-[#94A3B8]">Total projetado</p>
+                      <p className="text-xs text-[#8A94A0]">Total projetado</p>
                       <p className="font-mono text-sm font-bold text-[#00E676]">{brl(total)}</p>
                     </div>
                   </div>
@@ -132,7 +132,7 @@ export default function Grupos() {
             })}
           </div>
 
-          <p className="rounded-lg border border-[#004D40] bg-[#004D40]/25 p-3 text-xs leading-relaxed text-[#A7F3D0]">
+          <p className="rounded-lg border border-[#00E676]/15 bg-[#013B31]/55 p-3 text-xs leading-relaxed text-[#A7F3D0]">
             O período começa a contar no primeiro dia útil após a confirmação do pagamento pela administração. A
             apuração diária é proporcional aos dias úteis decorridos.
           </p>

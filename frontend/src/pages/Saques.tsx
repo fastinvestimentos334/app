@@ -55,12 +55,12 @@ export default function Saques() {
   return (
     <AppShell>
       <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Saques e resgates</h1>
-      <p className="mt-2 text-sm text-[#94A3B8]">
+      <p className="mt-2 text-sm text-[#8A94A0]">
         Solicite o resgate dos valores apurados e acompanhe o status de cada pedido.
       </p>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <Card className="border-[#004D40] bg-[#004D40]/40 p-5" data-testid="withdrawal-balance-card">
+        <Card className="border-[#00E676]/18 bg-gradient-to-br from-[#014A3E] to-[#012E27] shadow-[0_18px_50px_-30px_rgba(0,230,118,0.38)] p-5" data-testid="withdrawal-balance-card">
           <p className="text-xs tracking-wide text-[#A7F3D0] uppercase">Disponível para resgate</p>
           <p className="mt-2 font-mono text-3xl font-bold text-[#00E676]">
             {brl(balance?.available_balance ?? 0)}
@@ -71,7 +71,7 @@ export default function Saques() {
           </p>
         </Card>
 
-        <Card className="border-[#2D3239] bg-[#22252A] p-5" data-testid="withdrawal-form-card">
+        <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-5" data-testid="withdrawal-form-card">
           <p className="text-sm font-semibold text-white">Solicitar resgate</p>
           <form
             className="mt-4 space-y-4"
@@ -90,7 +90,7 @@ export default function Saques() {
             }}
           >
             <div>
-              <Label htmlFor="withdraw-amount" className="text-[#CBD5E1]">
+              <Label htmlFor="withdraw-amount" className="text-[#C0C8D1]">
                 Valor do resgate (R$)
               </Label>
               <Input
@@ -100,11 +100,11 @@ export default function Saques() {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0,00"
-                className="mt-2 h-12 border-[#2D3239] bg-[#141618] font-mono text-white"
+                className="mt-2 h-12 border-white/[0.08] bg-[#15181B] font-mono text-white"
               />
             </div>
             <div>
-              <Label htmlFor="withdraw-pix" className="text-[#CBD5E1]">
+              <Label htmlFor="withdraw-pix" className="text-[#C0C8D1]">
                 Chave PIX do titular
               </Label>
               <Input
@@ -113,9 +113,9 @@ export default function Saques() {
                 value={pixKey}
                 onChange={(e) => setPixKey(e.target.value)}
                 placeholder="CPF, e-mail, telefone ou chave aleatória"
-                className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+                className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
               />
-              <p className="mt-2 text-xs text-[#94A3B8]">
+              <p className="mt-2 text-xs text-[#8A94A0]">
                 A chave PIX deve pertencer ao mesmo CPF cadastrado como titular da conta.
               </p>
             </div>
@@ -132,9 +132,9 @@ export default function Saques() {
         </Card>
       </div>
 
-      <Card className="mt-4 flex gap-3 border-[#2D3239] bg-[#141618] p-4" data-testid="withdrawal-policy-note">
+      <Card className="mt-4 flex gap-3 border-white/[0.08] bg-[#15181B] p-4" data-testid="withdrawal-policy-note">
         <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#00E676]" />
-        <p className="text-xs leading-relaxed text-[#CBD5E1]">
+        <p className="text-xs leading-relaxed text-[#C0C8D1]">
           Toda liberação passa por aprovação manual da administração, com registro de auditoria. A aprovação
           administrativa <strong className="text-white">não constitui confirmação de pagamento</strong>: a
           efetivação é registrada em etapa separada, quando o pagamento é realizado.
@@ -149,37 +149,37 @@ export default function Saques() {
       )}
       <div className="mt-4 space-y-3" data-testid="withdrawals-list">
         {isLoading ? (
-          <Card className="border-[#2D3239] bg-[#22252A] p-6 text-center" data-testid="withdrawals-loading">
-            <p className="text-sm text-[#94A3B8]">Carregando solicitações...</p>
+          <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-6 text-center" data-testid="withdrawals-loading">
+            <p className="text-sm text-[#8A94A0]">Carregando solicitações...</p>
           </Card>
         ) : (list ?? []).length === 0 ? (
-          <Card className="border-[#2D3239] bg-[#22252A] p-6 text-center" data-testid="withdrawals-empty">
-            <p className="text-sm text-[#94A3B8]">Nenhuma solicitação de resgate registrada.</p>
+          <Card className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-6 text-center" data-testid="withdrawals-empty">
+            <p className="text-sm text-[#8A94A0]">Nenhuma solicitação de resgate registrada.</p>
           </Card>
         ) : (
           list?.map((w) => (
             <Card
               key={w.id}
-              className="border-[#2D3239] bg-[#22252A] p-4"
+              className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4"
               data-testid={`withdrawal-item-${w.id}`}
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="font-mono text-lg font-bold text-white">{brl(w.amount)}</p>
-                  <p className="mt-1 text-xs text-[#94A3B8]">
+                  <p className="mt-1 text-xs text-[#8A94A0]">
                     Solicitado em {dateTimeBR(w.created_at)} • PIX {w.pix_key}
                   </p>
                 </div>
                 <div className="flex flex-col items-end gap-1.5">
-                  <Badge className={STATUS_STYLE[w.status] ?? "bg-[#2D3239] text-white"}>
+                  <Badge className={STATUS_STYLE[w.status] ?? "border border-white/10 bg-white/[0.06] text-white"}>
                     {STATUS_LABELS[w.status] ?? w.status}
                   </Badge>
                   {w.paid && <span className="text-xs text-[#00E676]">Pagamento registrado</span>}
                 </div>
               </div>
               {w.justification && (
-                <p className="mt-3 rounded-lg border border-[#2D3239] bg-[#141618] p-3 text-xs text-[#CBD5E1]">
-                  <span className="text-[#94A3B8]">Parecer da administração:</span> {w.justification}
+                <p className="mt-3 rounded-lg border border-white/[0.08] bg-[#15181B] p-3 text-xs text-[#C0C8D1]">
+                  <span className="text-[#8A94A0]">Parecer da administração:</span> {w.justification}
                 </p>
               )}
               {w.decided_at && (

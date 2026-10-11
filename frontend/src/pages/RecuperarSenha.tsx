@@ -42,12 +42,12 @@ export default function RecuperarSenha() {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center bg-[#1C1E21] px-4 py-10 pb-28">
       <BrandLogo className="h-12 sm:h-14" />
-      <Card className="mt-7 w-full max-w-md border-[#2D3239] bg-[#22252A] p-6 sm:p-8">
+      <Card className="mt-7 w-full max-w-md border-white/[0.08] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_28px_70px_-36px_rgba(0,0,0,1)] p-6 sm:p-8">
         <h1 className="text-xl font-bold text-white sm:text-2xl">Recuperar senha</h1>
 
         {stage === "request" ? (
           <>
-            <p className="mt-2 text-sm text-[#94A3B8]">
+            <p className="mt-2 text-sm text-[#8A94A0]">
               Informe o e-mail cadastrado para gerar um código de redefinição válido por 30 minutos.
             </p>
             <form
@@ -58,7 +58,7 @@ export default function RecuperarSenha() {
               }}
             >
               <div>
-                <Label htmlFor="recover-email" className="text-[#CBD5E1]">
+                <Label htmlFor="recover-email" className="text-[#C0C8D1]">
                   E-mail
                 </Label>
                 <Input
@@ -68,7 +68,7 @@ export default function RecuperarSenha() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="seu@email.com"
-                  className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+                  className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
                 />
               </div>
               <Button
@@ -84,7 +84,7 @@ export default function RecuperarSenha() {
           </>
         ) : (
           <>
-            <p className="mt-2 text-sm text-[#94A3B8]">
+            <p className="mt-2 text-sm text-[#8A94A0]">
               Informe o código de redefinição e a nova senha.
             </p>
             <form
@@ -95,7 +95,7 @@ export default function RecuperarSenha() {
               }}
             >
               <div>
-                <Label htmlFor="reset-token" className="text-[#CBD5E1]">
+                <Label htmlFor="reset-token" className="text-[#C0C8D1]">
                   Código de redefinição
                 </Label>
                 <Input
@@ -103,11 +103,11 @@ export default function RecuperarSenha() {
                   data-testid="reset-token-input"
                   value={token}
                   onChange={(e) => setToken(e.target.value)}
-                  className="mt-2 h-12 border-[#2D3239] bg-[#141618] font-mono text-xs text-white"
+                  className="mt-2 h-12 border-white/[0.08] bg-[#15181B] font-mono text-xs text-white"
                 />
               </div>
               <div>
-                <Label htmlFor="reset-password" className="text-[#CBD5E1]">
+                <Label htmlFor="reset-password" className="text-[#C0C8D1]">
                   Nova senha
                 </Label>
                 <Input
@@ -117,7 +117,7 @@ export default function RecuperarSenha() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Mínimo 8 caracteres, com letras e números"
-                  className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+                  className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
                 />
               </div>
               <Button

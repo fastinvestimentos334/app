@@ -53,12 +53,12 @@ export default function InvestimentoDetalhe() {
           {inv?.group_code ?? "Investimento"}
         </h1>
         {inv && (
-          <Badge className="bg-[#004D40] text-[#A7F3D0]" data-testid="detail-status-badge">
+          <Badge className="border border-[#00E676]/25 bg-[#00E676]/10 text-[#A7F3D0]" data-testid="detail-status-badge">
             {STATUS_LABELS[inv.status] ?? inv.status}
           </Badge>
         )}
       </div>
-      <p className="mt-2 text-sm text-[#94A3B8]" data-testid="detail-modality-line">
+      <p className="mt-2 text-sm text-[#8A94A0]" data-testid="detail-modality-line">
         {inv ? `${inv.modality_name} • ${pct(inv.yield_percent)} no período` : "Carregando..."}
       </p>
 
@@ -80,8 +80,8 @@ export default function InvestimentoDetalhe() {
             mint: true,
           },
         ].map((item) => (
-          <Card key={item.label} className="border-[#2D3239] bg-[#22252A] p-4" data-testid={item.testid}>
-            <p className="text-xs text-[#94A3B8]">{item.label}</p>
+          <Card key={item.label} className="border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4" data-testid={item.testid}>
+            <p className="text-xs text-[#8A94A0]">{item.label}</p>
             <p
               className={`mt-1 font-mono text-base font-bold sm:text-lg ${
                 item.mint ? "text-[#00E676]" : "text-white"
@@ -93,19 +93,19 @@ export default function InvestimentoDetalhe() {
         ))}
       </div>
 
-      <Card className="mt-4 border-[#2D3239] bg-[#22252A] p-4 sm:p-5" data-testid="detail-chart-card">
+      <Card className="mt-4 border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4 sm:p-5" data-testid="detail-chart-card">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-sm font-semibold text-white">Evolução por dia útil</p>
-          <p className="text-xs text-[#94A3B8]">
+          <p className="text-xs text-[#8A94A0]">
             Início {dateBR(inv?.start_date)} • Vencimento {dateBR(inv?.end_date)}
           </p>
         </div>
         <div className="mt-4 h-52 w-full sm:h-64">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={realizedData.length > 1 ? realizedData : chartData}>
-              <CartesianGrid stroke="#2D3239" vertical={false} />
-              <XAxis dataKey="label" stroke="#94A3B8" fontSize={11} tickLine={false} />
-              <YAxis stroke="#94A3B8" fontSize={11} width={56} tickLine={false} />
+              <CartesianGrid stroke="rgba(255,255,255,0.08)" vertical={false} />
+              <XAxis dataKey="label" stroke="#8A94A0" fontSize={11} tickLine={false} />
+              <YAxis stroke="#8A94A0" fontSize={11} width={56} tickLine={false} />
               <Tooltip
                 contentStyle={{
                   background: "#141618",
@@ -133,29 +133,29 @@ export default function InvestimentoDetalhe() {
         </p>
       </Card>
 
-      <Card className="mt-4 border-[#2D3239] bg-[#22252A] p-4 sm:p-5" data-testid="detail-schedule-card">
+      <Card className="mt-4 border-white/[0.07] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_14px_40px_-24px_rgba(0,0,0,0.95)] p-4 sm:p-5" data-testid="detail-schedule-card">
         <p className="text-sm font-semibold text-white">Cronograma de apuração</p>
 
         {/* Desktop: table. Mobile: cards. */}
         <div className="mt-4 hidden sm:block">
           <Table>
             <TableHeader>
-              <TableRow className="border-[#2D3239]">
-                <TableHead className="text-[#94A3B8]">Dia útil</TableHead>
-                <TableHead className="text-[#94A3B8]">Data</TableHead>
-                <TableHead className="text-[#94A3B8]">Rendimento acumulado</TableHead>
-                <TableHead className="text-[#94A3B8]">Total</TableHead>
-                <TableHead className="text-[#94A3B8]">Situação</TableHead>
+              <TableRow className="border-white/[0.08]">
+                <TableHead className="text-[#8A94A0]">Dia útil</TableHead>
+                <TableHead className="text-[#8A94A0]">Data</TableHead>
+                <TableHead className="text-[#8A94A0]">Rendimento acumulado</TableHead>
+                <TableHead className="text-[#8A94A0]">Total</TableHead>
+                <TableHead className="text-[#8A94A0]">Situação</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {(data?.series ?? []).slice(1).map((p) => (
-                <TableRow key={p.day} className="border-[#2D3239]">
+                <TableRow key={p.day} className="border-white/[0.08]">
                   <TableCell className="font-mono text-white">{p.day}</TableCell>
-                  <TableCell className="text-[#CBD5E1]">{dateBR(p.date)}</TableCell>
+                  <TableCell className="text-[#C0C8D1]">{dateBR(p.date)}</TableCell>
                   <TableCell className="font-mono text-[#00E676]">{brl(p.accrued_yield)}</TableCell>
                   <TableCell className="font-mono text-white">{brl(p.accrued_total)}</TableCell>
-                  <TableCell className="text-xs text-[#94A3B8]">
+                  <TableCell className="text-xs text-[#8A94A0]">
                     {p.realized ? "Apurado" : "Projetado"}
                   </TableCell>
                 </TableRow>
@@ -169,17 +169,17 @@ export default function InvestimentoDetalhe() {
             <div
               key={p.day}
               data-testid={`schedule-row-${p.day}`}
-              className="flex items-center justify-between rounded-lg border border-[#2D3239] bg-[#141618] p-3"
+              className="flex items-center justify-between rounded-lg border border-white/[0.08] bg-[#15181B] p-3"
             >
               <div>
-                <p className="text-xs text-[#94A3B8]">
+                <p className="text-xs text-[#8A94A0]">
                   Dia {p.day} • {dateBR(p.date)}
                 </p>
                 <p className="mt-0.5 font-mono text-sm font-bold text-white">{brl(p.accrued_total)}</p>
               </div>
               <div className="text-right">
                 <p className="font-mono text-sm font-bold text-[#00E676]">+{brl(p.accrued_yield)}</p>
-                <p className="text-xs text-[#94A3B8]">{p.realized ? "Apurado" : "Projetado"}</p>
+                <p className="text-xs text-[#8A94A0]">{p.realized ? "Apurado" : "Projetado"}</p>
               </div>
             </div>
           ))}

@@ -111,7 +111,7 @@ export default function Cadastro() {
     mask?: (v: string) => string,
   ) => (
     <div>
-      <Label htmlFor={key} className="text-[#CBD5E1]">
+      <Label htmlFor={key} className="text-[#C0C8D1]">
         {label}
       </Label>
       <Input
@@ -119,7 +119,7 @@ export default function Cadastro() {
         data-testid={`register-${key}-input`}
         value={form[key]}
         onChange={(e) => set(key, mask ? mask(e.target.value) : e.target.value)}
-        className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+        className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
         {...props}
       />
     </div>
@@ -129,9 +129,9 @@ export default function Cadastro() {
     <div className="min-h-svh bg-[#1C1E21] px-4 py-10 pb-28">
       <div className="mx-auto flex max-w-2xl flex-col items-center">
         <BrandLogo className="h-12 sm:h-14" />
-        <Card className="mt-7 w-full border-[#2D3239] bg-[#22252A] p-5 sm:p-8">
+        <Card className="mt-7 w-full border-white/[0.08] bg-gradient-to-br from-[#24272C] to-[#1B1E22] shadow-[0_28px_70px_-36px_rgba(0,0,0,1)] p-5 sm:p-8">
           <h1 className="text-xl font-bold text-white sm:text-2xl">Criar minha conta</h1>
-          <p className="mt-2 text-sm text-[#94A3B8]">
+          <p className="mt-2 text-sm text-[#8A94A0]">
             Preencha seus dados cadastrais. As informações são utilizadas para identificação do titular e
             tratadas conforme a LGPD.
           </p>
@@ -143,7 +143,7 @@ export default function Cadastro() {
               {field("cpf", "CPF", { placeholder: "000.000.000-00", inputMode: "numeric" }, maskCpf)}
               <p
                 data-testid="register-cpf-explanation"
-                className="mt-2 flex gap-2 rounded-lg border border-[#004D40] bg-[#004D40]/25 p-3 text-xs leading-relaxed text-[#A7F3D0]"
+                className="mt-2 flex gap-2 rounded-lg border border-[#00E676]/15 bg-[#013B31]/55 p-3 text-xs leading-relaxed text-[#A7F3D0]"
               >
                 <Info className="mt-0.5 h-4 w-4 shrink-0" />
                 <span>
@@ -161,7 +161,7 @@ export default function Cadastro() {
 
             <div className="grid gap-4 sm:grid-cols-[1fr_2fr]">
               <div>
-                <Label htmlFor="cep" className="text-[#CBD5E1]">
+                <Label htmlFor="cep" className="text-[#C0C8D1]">
                   CEP
                 </Label>
                 <Input
@@ -175,7 +175,7 @@ export default function Cadastro() {
                     set("cep", masked);
                     void lookupCep(masked);
                   }}
-                  className="mt-2 h-12 border-[#2D3239] bg-[#141618] text-white"
+                  className="mt-2 h-12 rounded-xl border-white/[0.09] bg-[#15181B] text-white transition-colors duration-200 focus:border-[#00E676]/50"
                 />
               </div>
               {field("address", "Endereço", { placeholder: "Rua, avenida..." })}
@@ -192,7 +192,7 @@ export default function Cadastro() {
             </div>
 
             <div>
-              <Label htmlFor="state" className="text-[#CBD5E1]">
+              <Label htmlFor="state" className="text-[#C0C8D1]">
                 Estado (UF)
               </Label>
               <select
@@ -200,7 +200,7 @@ export default function Cadastro() {
                 data-testid="register-state-select"
                 value={form.state}
                 onChange={(e) => set("state", e.target.value)}
-                className="mt-2 h-12 w-full rounded-lg border border-[#2D3239] bg-[#141618] px-3 text-white"
+                className="mt-2 h-12 w-full rounded-lg border border-white/[0.08] bg-[#15181B] px-3 text-white"
               >
                 <option value="">Selecione</option>
                 {UF.map((uf) => (
@@ -219,18 +219,18 @@ export default function Cadastro() {
               })}
               {field("confirm", "Confirmar senha", { type: "password", autoComplete: "new-password" })}
             </div>
-            <p className="text-xs text-[#94A3B8]">
+            <p className="text-xs text-[#8A94A0]">
               A senha deve ter no mínimo 8 caracteres, contendo letras e números.
             </p>
 
-            <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-[#2D3239] bg-[#141618] p-4">
+            <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-white/[0.08] bg-[#15181B] p-4">
               <Checkbox
                 data-testid="register-terms-checkbox"
                 checked={accept}
                 onCheckedChange={(checked) => setAccept(checked === true)}
                 className="mt-0.5"
               />
-              <span className="text-xs leading-relaxed text-[#CBD5E1]">
+              <span className="text-xs leading-relaxed text-[#C0C8D1]">
                 Li e aceito os{" "}
                 <Link to="/termos" className="text-[#00E676] underline">
                   Termos de uso
@@ -254,7 +254,7 @@ export default function Cadastro() {
             </Button>
           </form>
 
-          <p className="mt-6 text-sm text-[#94A3B8]">
+          <p className="mt-6 text-sm text-[#8A94A0]">
             Já tem conta?{" "}
             <Link to="/login" data-testid="register-login-link" className="font-semibold text-[#00E676]">
               Entrar

@@ -14,7 +14,7 @@ export default function BrandLogo({
       <img
         src="/logo-fast.png"
         alt="FAST INVESTIMENTOS"
-        className={`${className} w-auto object-contain`}
+        className={`${className} w-auto object-contain mix-blend-lighten`}
       />
     </Link>
   );
